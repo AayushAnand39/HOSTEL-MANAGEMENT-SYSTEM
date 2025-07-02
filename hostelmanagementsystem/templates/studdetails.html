@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Details</title>
+  <style>
+    :root {
+      --primary-color: #004d40;
+      --accent-color: #1de9b6;
+      --bg-light: #f1f8f9;
+      --text-dark: #333;
+      --white: #fff;
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Reset & Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      padding-bottom: 50px;
+    }
+
+    /* Navbar Styles */
+    .navbar {
+      background-color: var(--primary-color);
+      padding: 18px 0;
+      text-align: center;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar a {
+      color: var(--white);
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: 500;
+      font-size: 16px;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .navbar a::after {
+      content: "";
+      display: block;
+      height: 2px;
+      background: var(--accent-color);
+      width: 0;
+      transition: width 0.3s;
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+    }
+
+    .navbar a:hover::after {
+      width: 100%;
+    }
+
+    .navbar a:hover {
+      color: var(--accent-color);
+    }
+
+    /* Container */
+    .container {
+      max-width: 1100px;
+      background-color: var(--white);
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 30px;
+      font-size: 2.5em;
+    }
+
+    h2 {
+      margin: 30px 0 20px;
+      color: var(--primary-color);
+      font-size: 1.8em;
+      text-align: center;
+    }
+
+    /* Button Container for Hall Filtering */
+    .button-container {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .button-container form {
+      display: inline-block;
+      margin: 5px;
+    }
+    .button-container button {
+      background-color: var(--primary-color);
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      color: var(--white);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    .button-container button:hover {
+      background-color: var(--accent-color);
+    }
+
+    /* Table Container to handle overflow */
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+    }
+
+    /* Table Styles */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 0 auto; /* center horizontally */
+      min-width: 1200px;  /* optional: force a minimum width so that table layout is preserved */
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 12px 15px;
+      text-align: center;
+    }
+    th {
+      background-color: var(--primary-color);
+      color: var(--white);
+      font-weight: 600;
+    }
+    tr:nth-child(even) td {
+      background-color: #f9f9f9;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .navbar a {
+        display: block;
+        margin: 10px 0;
+      }
+      .container {
+        margin: 20px;
+        padding: 20px;
+      }
+      h1 {
+        font-size: 2em;
+      }
+      table, th, td {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <a href="/authhome">HOME</a>
+    <a href="/studdetails">STUDENT DETAILS</a>
+    <a href="/roomall">ROOM ALLOTMENT</a>
+    <a href="/hostelcompview">HOSTEL COMPLAINT</a>
+    <a href="/messcompview">MESS COMPLAINT</a>
+    <a href="/authprofile">PROFILE</a>
+  </div>
+
+  <div class="container">
+    <h1>Student Details</h1>
+
+    <div class="button-container">
+      <form method="get" action="/studdetails"><button type="submit" name="hall" value="1">Hall 1</button></form>
+      <form method="get" action="/studdetails"><button type="submit" name="hall" value="2">Hall 2</button></form>
+      <form method="get" action="/studdetails"><button type="submit" name="hall" value="3">Hall 3</button></form>
+      <form method="get" action="/studdetails"><button type="submit" name="hall" value="4">Hall 4</button></form>
+      <form method="get" action="/studdetails"><button type="submit" name="hall" value="5">Hall 5</button></form>
+      <form method="get" action="/studdetails"><button type="submit" name="hall" value="6">Hall 6</button></form>
+      <br><br>
+      <form method="get" action="/studdetails"><button type="submit" name="hall" value="all">Show All Students</button></form>
+    </div>
+
+    <h2>
+      {% if hall == 'all' %}
+        Showing All Students
+      {% else %}
+        Showing Students in Hall {{ hall }}
+      {% endif %}
+    </h2>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Father</th>
+            <th>Mother</th>
+            <th>Degree</th>
+            <th>Gender</th>
+            <th>Student ID</th>
+            <th>Year</th>
+            <th>Hall No</th>
+            <th>Hall Name</th>
+            <th>Room No</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Alt Phone 1</th>
+            <th>Alt Phone 2</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in students %}
+            <tr>
+              <td>{{ s.0 }}</td>
+              <td>{{ s.1 }}</td>
+              <td>{{ s.2 }}</td>
+              <td>{{ s.3 }}</td>
+              <td>{{ s.4 }}</td>
+              <td>{{ s.5 }}</td>
+              <td>{{ s.6 }}</td>
+              <td>{{ s.7 }}</td>
+              <td>{{ s.8 }}</td>
+              <td>{{ s.13 }}</td>
+              <td>{{ s.12 }}</td>
+              <td>{{ s.9 }}</td>
+              <td>{{ s.10 }}</td>
+              <td>{{ s.11 }}</td>
+            </tr>
+          {% empty %}
+            <tr><td colspan="14">No students found for this hall.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Authority Profile</title>
+  <style>
+    :root {
+      --primary:  #14532d;
+      --accent:   #22c55e;
+      --danger:   #e74c3c;       /* for logout */
+      --light:    #f0fdf4;
+      --white:    #ffffff;
+      --shadow:   0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--light);
+      color: #1e293b;
+      padding-bottom: 60px;
+    }
+
+    .navbar {
+      background-color: var(--primary);
+      padding: 20px 0;           /* slightly taller */
+      text-align: center;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar a {
+      color: var(--white);
+      text-decoration: none;
+      margin: 0 18px;           /* more breathing room */
+      font-weight: 500;
+      font-size: 1.05rem;       /* a bit larger */
+      position: relative;
+      transition: color 0.2s ease;
+    }
+    .navbar a::after {
+      content: "";
+      height: 2px;
+      width: 0;
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      background-color: var(--accent);
+      transition: width 0.3s ease;
+    }
+    .navbar a:hover {
+      color: var(--accent);
+    }
+    .navbar a:hover::after {
+      width: 100%;
+    }
+
+    .profile-container {
+      max-width: 700px;
+      margin: 40px auto;
+      background: var(--white);
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .profile-container h1 {
+      text-align: center;
+      margin-bottom: 25px;
+      color: var(--primary);
+      font-size: 2rem;
+    }
+
+    .profile-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .profile-table td {
+      padding: 12px 16px;
+      border: 1px solid #e5e7eb;
+      font-size: 1rem;
+    }
+
+    .profile-table td.label {
+      font-weight: bold;
+      background-color: #f0fdf4;
+      color: var(--primary);
+      width: 35%;
+    }
+
+    /* ——— Action buttons ——— */
+    .profile-actions {
+      margin-top: 30px;
+      text-align: center;
+    }
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      color: var(--white);
+      font-size: 1rem;
+      font-weight: 500;
+      padding: 10px 24px;
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+      margin: 0 8px;
+    }
+    .btn.checkin {
+      background-color: var(--primary);
+    }
+    .btn.checkin:hover {
+      background-color: var(--accent);
+    }
+    .btn.logout {
+      background-color: var(--danger);
+    }
+    .btn.logout:hover {
+      background-color: #c0392b;
+    }
+
+    @media (max-width: 768px) {
+      .navbar a {
+        display: block;
+        margin: 10px 0;
+      }
+      .profile-container {
+        margin: 30px 20px;
+        padding: 20px;
+      }
+      .profile-container h1 {
+        font-size: 1.6rem;
+      }
+      .profile-table td {
+        display: block;
+        width: 100%;
+        text-align: left;
+        border: none;
+        padding: 10px 0;
+      }
+      .profile-table td.label {
+        padding-top: 15px;
+        background: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <a href="/authhome">HOME</a>
+    <a href="/studdetails">STUDENT DETAILS</a>
+    <a href="/roomall">ROOM ALLOTMENT</a>
+    <a href="/hostelcompview">HOSTEL COMPLAINT</a>
+    <a href="/messcompview">MESS COMPLAINT</a>
+    <a href="/authprofile">PROFILE</a>
+  </div>
+
+  <div class="profile-container">
+    <h1>Profile</h1>
+    <table class="profile-table">
+      <tr><td class="label">Name:</td><td>{{ name }}</td></tr>
+      <tr><td class="label">Position:</td><td>{{ position }}</td></tr>
+      <tr><td class="label">Hall Number:</td><td>{{ hallno }}</td></tr>
+      <tr><td class="label">Hall Name:</td><td>{{ hallname }}</td></tr>
+      <tr><td class="label">Phone Number:</td><td>{{ phonenumber }}</td></tr>
+      <tr><td class="label">Email:</td><td>{{ email }}</td></tr>
+    </table>
+
+    <div class="profile-actions">
+      <a href="{% url 'checkincheckout' %}" class="btn checkin">
+        Go to Check‑In/Out
+      </a>
+      <a href="{% url 'auth_logout' %}" class="btn logout">
+        Logout
+      </a>
+    </div>
+  </div>
+</body>
+</html>

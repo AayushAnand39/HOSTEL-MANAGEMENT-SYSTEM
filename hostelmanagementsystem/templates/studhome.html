@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Home</title>
+  <style>
+    :root {
+      --primary-color: #004d40;
+      --accent-color: #1de9b6;
+      --bg-light: #f1f8f9;
+      --text-dark: #333;
+      --white: #fff;
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+    }
+
+    .navbar {
+      background-color: var(--primary-color);
+      padding: 18px 0;
+      text-align: center;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar a {
+      color: var(--white);
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: 500;
+      font-size: 16px;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .navbar a::after {
+      content: '';
+      display: block;
+      height: 2px;
+      background: var(--accent-color);
+      width: 0;
+      transition: width 0.3s;
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+    }
+
+    .navbar a:hover::after {
+      width: 100%;
+    }
+
+    .navbar a:hover {
+      color: var(--accent-color);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    .section {
+      background-color: var(--white);
+      padding: 25px 30px;
+      margin-bottom: 30px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .section:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    .section h2 {
+      color: var(--primary-color);
+      margin-bottom: 10px;
+      font-size: 22px;
+    }
+
+    .section p {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 12px 0;
+      }
+
+      .navbar a {
+        display: block;
+        margin: 10px 0;
+      }
+
+      .section {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <a href="/studhome">HOME</a>
+    <a href="/hostelreg">HOSTEL REGISTRATION AND FEE PAYMENT</a>
+    <a href="/payhis">PAYMENT HISTORY</a>
+    <a href="/hostelcomp">HOSTEL COMPLAINT</a>
+    <a href="/messcomp">MESS COMPLAINT</a>
+    <a href="/studprofile">PROFILE</a>
+  </div>
+
+  <div class="container">
+    <div class="section">
+      <h2>Welcome to Your Student Dashboard</h2>
+      <p>This portal simplifies your hostel experience. From registration and fee payments to submitting complaints—everything is just a few clicks away.</p>
+    </div>
+
+    <div class="section">
+      <h2>Hostel Registration & Fee Payment</h2>
+      <p>Easily register for hostel accommodation and complete payments online. The portal ensures secure and fast processing with instant confirmation.</p>
+    </div>
+
+    <div class="section">
+      <h2>Complaint Management</h2>
+      <p>Facing any hostel or mess issues? File complaints directly here. Track the status and resolution of your issues transparently and efficiently.</p>
+    </div>
+
+    <div class="section">
+      <h2>Payment History</h2>
+      <p>Access and download your previous transactions, receipts, and due details. Everything is neatly organized for your convenience.</p>
+    </div>
+
+    <div class="section">
+      <h2>Student Profile</h2>
+      <p>Update your personal and academic details, manage your contact info, and keep your records up-to-date through the profile section.</p>
+    </div>
+  </div>
+</body>
+</html>

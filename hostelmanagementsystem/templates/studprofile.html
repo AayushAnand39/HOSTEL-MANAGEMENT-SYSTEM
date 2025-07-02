@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Student Profile</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --primary-color:  #004d40;
+      --accent-color:   #1de9b6;
+      --danger-color:   #e74c3c;     /* for logout button */
+      --bg-light:       #f1f8f9;
+      --text-dark:      #333;
+      --white:          #ffffff;
+      --shadow:         0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0; padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      padding-bottom: 50px;
+    }
+
+    .navbar {
+      background-color: var(--primary-color);
+      padding: 18px 0;
+      text-align: center;
+      box-shadow: var(--shadow);
+      position: sticky; top: 0; z-index: 1000;
+    }
+
+    .navbar a {
+      color: var(--white);
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: 500;
+      font-size: 16px;
+      position: relative;
+      transition: color 0.3s;
+    }
+    .navbar a::after {
+      content: '';
+      display: block;
+      height: 2px;
+      background: var(--accent-color);
+      width: 0;
+      transition: width 0.3s;
+      position: absolute;
+      bottom: -4px; left: 0;
+    }
+    .navbar a:hover {
+      color: var(--accent-color);
+    }
+    .navbar a:hover::after {
+      width: 100%;
+    }
+
+    .container {
+      max-width: 900px;
+      background-color: var(--white);
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 40px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 12px 15px;
+      text-align: left;
+      border: 1px solid #ddd;
+      font-size: 1rem;
+    }
+    th {
+      background-color: var(--primary-color);
+      color: var(--white);
+      font-weight: 600;
+    }
+    tr:nth-child(even) td {
+      background-color: #f1f8f9;
+    }
+
+    h2 {
+      margin-top: 30px;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+    }
+
+    /* ——— Logout button styles ——— */
+    .profile-actions {
+      text-align: center;
+      margin-top: 30px;
+    }
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      padding: 10px 24px;
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--white);
+      border-radius: 6px;
+      transition: background-color 0.3s ease;
+      margin: 0 8px;
+    }
+    .btn.logout {
+      background-color: var(--danger-color);
+    }
+    .btn.logout:hover {
+      background-color: #c0392b;
+    }
+
+    @media (max-width: 768px) {
+      .navbar a {
+        display: block;
+        margin: 10px 0;
+      }
+      .container {
+        padding: 20px;
+        margin: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <a href="/studhome">HOME</a>
+    <a href="/hostelreg">HOSTEL REGISTRATION & FEE PAYMENT</a>
+    <a href="/payhis">PAYMENT HISTORY</a>
+    <a href="/hostelcomp">HOSTEL COMPLAINT</a>
+    <a href="/messcomp">MESS COMPLAINT</a>
+    <a href="/studprofile">PROFILE</a>
+  </div>
+
+  <div class="container">
+    <h1>Student Profile</h1>
+
+    <h2>Personal Details</h2>
+    <table>
+      <tr><th>Name</th>            <td>{{ student_name }}</td></tr>
+      <tr><th>Father's Name</th>  <td>{{ father_name }}</td></tr>
+      <tr><th>Mother's Name</th>  <td>{{ mother_name }}</td></tr>
+      <tr><th>Gender</th>         <td>{{ gender }}</td></tr>
+      <tr><th>Degree</th>         <td>{{ degree }}</td></tr>
+      <tr><th>Year</th>           <td>{{ year }}</td></tr>
+      <tr><th>Email</th>          <td>{{ email }}</td></tr>
+      <tr><th>Student ID</th>     <td>{{ student_id }}</td></tr>
+    </table>
+
+    <h2>Hostel Details</h2>
+    <table>
+      <tr><th>Hall Number</th> <td>{{ hall_no }}</td></tr>
+      <tr><th>Hall Name</th>   <td>{{ hall_name }}</td></tr>
+      <tr><th>Room Number</th> <td>{{ room_no }}</td></tr>
+    </table>
+
+    <h2>Contact Numbers</h2>
+    <table>
+      <tr><th>Phone Number</th>      <td>{{ phonenumber }}</td></tr>
+      <tr><th>Alternate Phone 1</th>  <td>{{ phonenumber1 }}</td></tr>
+      <tr><th>Alternate Phone 2</th>  <td>{{ phonenumber2 }}</td></tr>
+    </table>
+
+    <h2>Hostel Complaint History</h2>
+    {% if hostel_complaints %}
+      <table>
+        <thead>
+          <tr>
+            <th>Complaint</th><th>Hall No</th><th>Room No</th><th>Addressed</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for complaint, hall_no, room_no, addressed in hostel_complaints %}
+          <tr>
+            <td>{{ complaint }}</td>
+            <td>{{ hall_no }}</td>
+            <td>{{ room_no }}</td>
+            <td>{{ addressed }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No hostel complaints filed.</p>
+    {% endif %}
+
+    <h2>Mess Complaint History</h2>
+    {% if mess_complaints %}
+      <table>
+        <thead>
+          <tr>
+            <th>Complaint</th><th>Hall No</th><th>Addressed</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for complaint, hall_no, addressed in mess_complaints %}
+          <tr>
+            <td>{{ complaint }}</td>
+            <td>{{ hall_no }}</td>
+            <td>{{ addressed }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No mess complaints filed.</p>
+    {% endif %}
+
+    <!-- Logout button -->
+    <div class="profile-actions">
+      <a href="{% url 'stud_logout' %}" class="btn logout">Logout</a>
+    </div>
+  </div>
+</body>
+</html>

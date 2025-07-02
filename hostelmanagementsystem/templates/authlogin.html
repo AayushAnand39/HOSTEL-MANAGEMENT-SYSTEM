@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authority Login Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #e0f7fa, #f1f8e9);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: #004d40;
+            padding: 15px 0;
+            text-align: center;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            font-weight: bold;
+            font-size: 16px;
+            transition: color 0.3s;
+        }
+
+        .navbar a:hover {
+            color: #ffeb3b;
+        }
+
+        h2 {
+            text-align: center;
+            color: #004d40;
+            margin-top: 30px;
+            font-size: 26px;
+        }
+
+        .message {
+            text-align: center;
+            margin-top: 10px;
+            color: red;
+        }
+
+        form {
+            background-color: white;
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        form input[type="text"],
+        form input[type="email"],
+        form input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            transition: border-color 0.3s;
+        }
+
+        form input[type="text"]:focus,
+        form input[type="email"]:focus,
+        form input[type="password"]:focus {
+            border-color: #00796b;
+            outline: none;
+        }
+
+        form input[type="submit"] {
+            background-color: #00796b;
+            color: white;
+            padding: 12px;
+            width: 100%;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: #004d40;
+        }
+
+        @media (max-width: 600px) {
+            form {
+                margin: 20px;
+                padding: 20px;
+            }
+
+            .navbar a {
+                display: block;
+                margin: 10px 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="/">HOME</a>
+        <a href="/authreg">AUTHORITY REGISTRATION</a>
+        <a href="/studreg">STUDENT REGISTRATION</a>
+        <a href="/authlogin">AUTHORITY LOGIN</a>
+        <a href="/studlogin">STUDENT LOGIN</a>
+    </div>
+
+    <h2>Authority Login</h2>
+
+    {% if error %}
+        <div class="message">{{ error }}</div>
+    {% elif success %}
+        <div class="message" style="color: green;">{{ success }}</div>
+    {% endif %}
+
+    <form action="/authlogin" method="post">
+        {% csrf_token %}
+        <input type="text" name="id" id="id" placeholder="Enter assigned ID" required>
+        <input type="email" name="email" id="email" placeholder="Enter your Email ID" required>
+        <input type="password" name="password" id="password" placeholder="Enter Your Password" required>
+        <input type="submit" value="Login">
+    </form>
+</body>
+</html>

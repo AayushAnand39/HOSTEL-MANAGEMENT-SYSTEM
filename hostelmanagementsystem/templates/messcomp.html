@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mess Complaint</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --primary-color: #004d40;
+      --accent-color: #1de9b6;
+      --bg-light: #f1f8f9;
+      --text-dark: #333;
+      --white: #fff;
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      padding-bottom: 50px;
+    }
+
+    .navbar {
+      background-color: var(--primary-color);
+      padding: 18px 0;
+      text-align: center;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar a {
+      color: var(--white);
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: 500;
+      font-size: 16px;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .navbar a::after {
+      content: '';
+      display: block;
+      height: 2px;
+      background: var(--accent-color);
+      width: 0;
+      transition: width 0.3s;
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+    }
+
+    .navbar a:hover::after {
+      width: 100%;
+    }
+
+    .navbar a:hover {
+      color: var(--accent-color);
+    }
+
+    .container {
+      max-width: 800px;
+      background-color: var(--white);
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: var(--primary-color);
+      text-align: center;
+    }
+
+    label {
+      font-size: 16px;
+      margin-bottom: 8px;
+      display: inline-block;
+      color: var(--primary-color);
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+      font-size: 14px;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    button {
+      background-color: var(--primary-color);
+      color: var(--white);
+      font-size: 16px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: var(--accent-color);
+    }
+
+    .messages {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 20px;
+    }
+
+    .messages li {
+      color: green;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .navbar a {
+        display: block;
+        margin: 10px 0;
+      }
+
+      .container {
+        padding: 20px;
+        margin: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <a href="/studhome">HOME</a>
+    <a href="/hostelreg">HOSTEL REGISTRATION AND FEE PAYMENT</a>
+    <a href="/payhis">PAYMENT HISTORY</a>
+    <a href="/hostelcomp">HOSTEL COMPLAINT</a>
+    <a href="/messcomp">MESS COMPLAINT</a>
+    <a href="/studprofile">PROFILE</a>
+  </div>
+
+  <div class="container">
+    <h2>Mess Complaint Form</h2>
+
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+          <li>{{ message }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <form method="POST">
+      {% csrf_token %}
+
+      <!-- Student ID (Read-only) -->
+      <label for="student_id">Student ID:</label>
+      <input type="text" name="student_id" value="{{ student_id }}" readonly><br>
+
+      <!-- Hall Number (Read-only) -->
+      <label for="hall_no">Hall Number:</label>
+      <input type="text" name="hall_no" value="{{ hall_no }}" readonly><br>
+
+      <!-- Complaint Textarea -->
+      <label for="complaint">Your Complaint:</label><br>
+      <textarea name="complaint" rows="5" cols="50" required></textarea><br>
+
+      <button type="submit">Submit Complaint</button>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hall {{ hall_no }} - Room Allotment</title>
+  <style>
+    :root {
+      --primary-color: #004d40;
+      --accent-color: #1de9b6;
+      --bg-light: #f1f8f9;
+      --text-dark: #333;
+      --white: #fff;
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      padding-bottom: 50px;
+    }
+
+    .navbar {
+      background-color: var(--primary-color);
+      padding: 18px 0;
+      text-align: center;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar a {
+      color: var(--white);
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: 500;
+      font-size: 16px;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .navbar a::after {
+      content: "";
+      display: block;
+      height: 2px;
+      background: var(--accent-color);
+      width: 0;
+      transition: width 0.3s;
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+    }
+
+    .navbar a:hover::after {
+      width: 100%;
+    }
+
+    .navbar a:hover {
+      color: var(--accent-color);
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--primary-color);
+      margin: 40px 0 20px;
+      font-size: 2.5em;
+    }
+
+    .messages {
+      max-width: 800px;
+      margin: 0 auto 20px;
+      padding: 0;
+      list-style: none;
+    }
+
+    .messages li {
+      padding: 10px 15px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .messages .success {
+      background-color: #e0f2f1;
+      color: #00796b;
+    }
+
+    .messages .error {
+      background-color: #ffebee;
+      color: #c62828;
+    }
+
+    table {
+      width: 90%;
+      margin: 0 auto;
+      border-collapse: collapse;
+      background-color: var(--white);
+      box-shadow: var(--shadow);
+      border-radius: 8px;
+      overflow: hidden;
+      min-width: 700px;
+    }
+
+    th, td {
+      padding: 15px;
+      text-align: center;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      background-color: var(--primary-color);
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f9f9f9;
+    }
+
+    form.inline {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    form.inline input[type="text"] {
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    form.inline button {
+      background-color: var(--primary-color);
+      color: var(--white);
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    form.inline button:hover {
+      background-color: var(--accent-color);
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2em;
+        margin: 20px 0;
+      }
+
+      table {
+        width: 100%;
+        font-size: 14px;
+        overflow-x: auto;
+      }
+
+      form.inline {
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      .navbar a {
+        display: block;
+        margin: 10px 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <a href="/authhome">HOME</a>
+    <a href="/studdetails">STUDENT DETAILS</a>
+    <a href="/roomall">ROOM ALLOTMENT</a>
+    <a href="/hostelcompview">HOSTEL COMPLAINT</a>
+    <a href="/messcompview">MESS COMPLAINT</a>
+    <a href="/authprofile">PROFILE</a>
+  </div>
+
+  <h1>Hall {{ hall_no }} ({{ hall_name }}) – Room Allotment</h1>
+
+  {% if messages %}
+    <ul class="messages">
+      {% for message in messages %}
+        <li class="{{ message.tags }}">{{ message }}</li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+
+  <table>
+    <thead>
+      <tr>
+        <th>Room No.</th>
+        <th>Members</th>
+        <th>Occupancy</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for room in rooms %}
+      <tr>
+        <td>{{ room.room_no }}</td>
+        <td>
+          {% if room.members %}
+            {{ room.members|join:", " }}
+          {% else %}
+            —
+          {% endif %}
+        </td>
+        <td>{{ room.occupancy }} / 3</td>
+        <td>
+          {% if room.occupancy < 3 %}
+          <form method="post" class="inline">
+            {% csrf_token %}
+            <input type="hidden" name="room_no" value="{{ room.room_no }}">
+            <input type="text" name="student_id" placeholder="Student ID" required>
+            <button type="submit">Allot</button>
+          </form>
+          {% else %}
+            Full
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>

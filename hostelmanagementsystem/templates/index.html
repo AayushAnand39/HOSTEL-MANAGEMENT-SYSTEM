@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Management System</title>
+    <style>
+        /* Reset and basic styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(to right, #f4f6f9, #e0f7fa);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar styles */
+        .navbar {
+            background-color: #004d40;
+            padding: 15px 0;
+            text-align: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            margin: 0 20px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .navbar a:hover {
+            color: #ffeb3b;
+        }
+
+        /* Hero Section */
+        .hero {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 42px;
+            color: #004d40;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #333;
+            max-width: 700px;
+        }
+
+        /* Features Section */
+        .features {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            padding: 50px 20px;
+            background-color: #ffffff;
+        }
+
+        .feature-card {
+            background: #fefefe;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+            width: 280px;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card h3 {
+            color: #00796b;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #555;
+            font-size: 14px;
+        }
+
+        footer {
+            background-color: #004d40;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+        <a href="/">HOME</a>
+        <a href="/authreg">AUTHORITY REGISTRATION</a>
+        <a href="/studreg">STUDENT REGISTRATION</a>
+        <a href="/authlogin">AUTHORITY LOGIN</a>
+        <a href="/studlogin">STUDENT LOGIN</a>
+    </div>
+
+    <section class="hero">
+        <h1>Welcome to the Hostel Management System</h1>
+        <p>Manage hostel operations effortlessly with streamlined room allotments, real-time complaint handling, and secure student and authority access — all in one place.</p>
+    </section>
+
+    <section class="features">
+        <div class="feature-card">
+            <h3>Efficient Room Allocation</h3>
+            <p>Automatically assign rooms based on availability and student preferences.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Check-In / Check-Out Logs</h3>
+            <p>Track student movements with accurate entry and exit logs for better security.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Complaint Portal</h3>
+            <p>Submit and resolve hostel and mess complaints with ease through a dedicated portal.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Self Registration</h3>
+            <p>Students and authorities can register themselves with a simple, secure process.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Secure Login System</h3>
+            <p>Separate login portals for students and authorities ensure safe and restricted access.</p>
+        </div>
+        <div class="feature-card">
+            <h3>Payment Gateway</h3>
+            <p>Quick and secure online fee payment system integrated with popular payment options.</p>
+        </div>
+    </section>
+
+    <footer>
+        © 2025 Hostel Management System. All Rights Reserved.
+    </footer>
+</body>
+</html>

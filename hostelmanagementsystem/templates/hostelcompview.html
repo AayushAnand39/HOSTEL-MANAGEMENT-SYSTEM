@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>View Hostel Related Complaints</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+      --primary: #14532d;
+      --accent: #22c55e;
+      --light: #f0fdf4;
+      --danger: #dc2626;
+      --success: #16a34a;
+      --white: #fff;
+      --shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--light);
+      color: #1e293b;
+      padding-bottom: 60px;
+    }
+
+    .navbar {
+      background-color: var(--primary);
+      padding: 15px 0;
+      text-align: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: var(--shadow);
+    }
+
+    .navbar a {
+      color: var(--white);
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: 500;
+      transition: color 0.2s ease;
+      position: relative;
+    }
+
+    .navbar a:hover {
+      color: var(--accent);
+    }
+
+    .navbar a::after {
+      content: "";
+      height: 2px;
+      width: 0;
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      background-color: var(--accent);
+      transition: width 0.3s ease;
+    }
+
+    .navbar a:hover::after {
+      width: 100%;
+    }
+
+    h1 {
+      text-align: center;
+      margin: 30px 0 20px;
+      font-size: 2rem;
+      color: var(--primary);
+    }
+
+    .messages {
+      max-width: 900px;
+      margin: 0 auto 20px;
+      list-style: none;
+      padding: 0 20px;
+    }
+
+    .messages li {
+      padding: 12px 16px;
+      border-radius: 5px;
+      margin-bottom: 10px;
+      font-weight: 500;
+    }
+
+    .messages .success {
+      background-color: #dcfce7;
+      color: var(--success);
+    }
+
+    .messages .error {
+      background-color: #fee2e2;
+      color: var(--danger);
+    }
+
+    table {
+      width: 90%;
+      margin: 0 auto;
+      border-collapse: collapse;
+      background: var(--white);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      min-width: 720px;
+    }
+
+    th, td {
+      padding: 14px;
+      text-align: center;
+      border: 1px solid #e2e8f0;
+    }
+
+    th {
+      background-color: var(--primary);
+      color: var(--white);
+    }
+
+    tr:nth-child(even) td {
+      background-color: #f9fafb;
+    }
+
+    form.inline {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    form.inline button {
+      background-color: var(--primary);
+      color: var(--white);
+      padding: 7px 12px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    form.inline button:hover {
+      background-color: var(--accent);
+    }
+
+    td[colspan] {
+      font-style: italic;
+      color: #6b7280;
+    }
+
+    @media (max-width: 768px) {
+      table {
+        font-size: 14px;
+        min-width: unset;
+        width: 100%;
+      }
+
+      .navbar a {
+        display: block;
+        margin: 10px 0;
+      }
+
+      h1 {
+        font-size: 1.6rem;
+        margin: 25px 10px;
+      }
+
+      form.inline {
+        flex-direction: column;
+        gap: 6px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <a href="/authhome">HOME</a>
+    <a href="/studdetails">STUDENT DETAILS</a>
+    <a href="/roomall">ROOM ALLOTMENT</a>
+    <a href="/hostelcompview">HOSTEL COMPLAINT</a>
+    <a href="/messcompview">MESS COMPLAINT</a>
+    <a href="/authprofile">PROFILE</a>
+  </div>
+
+  <h1>Pending Hostel Complaints</h1>
+
+  {% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li class="{{ message.tags }}">{{ message }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  <table>
+    <thead>
+      <tr>
+        <th>Student ID</th>
+        <th>Complaint</th>
+        <th>Hall No.</th>
+        <th>Room No.</th>
+        <th>Addressed?</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for comp in complaints %}
+      <tr>
+        <td>{{ comp.1 }}</td>
+        <td>{{ comp.2 }}</td>
+        <td>{{ comp.3 }}</td>
+        <td>{{ comp.4 }}</td>
+        <td>
+          <form method="post" class="inline">
+            {% csrf_token %}
+            <input type="hidden" name="comp_id" value="{{ comp.0 }}">
+            <button type="submit">Mark Addressed</button>
+          </form>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="5" style="text-align:center;">No pending complaints.</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>

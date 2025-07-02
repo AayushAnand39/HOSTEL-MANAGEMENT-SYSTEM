@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Authority Home Page</title>
+  <style>
+    :root {
+      --primary-color: #004d40;
+      --accent-color: #1de9b6;
+      --bg-light: #f1f8f9;
+      --text-dark: #333;
+      --white: #fff;
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      --hover-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      padding-bottom: 50px;
+    }
+
+    .navbar {
+      background-color: var(--primary-color);
+      padding: 18px 0;
+      text-align: center;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar a {
+      color: var(--white);
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: 500;
+      font-size: 16px;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .navbar a::after {
+      content: '';
+      display: block;
+      height: 2px;
+      background: var(--accent-color);
+      width: 0;
+      transition: width 0.3s;
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+    }
+
+    .navbar a:hover::after {
+      width: 100%;
+    }
+
+    .navbar a:hover {
+      color: var(--accent-color);
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 30px;
+      background-color: var(--white);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 40px;
+    }
+
+    h2 {
+      margin-top: 30px;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+    }
+
+    /* Cards layout */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 30px;
+      justify-content: center;
+    }
+
+    .feature-card {
+      background-color: var(--white);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      text-align: center;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--hover-shadow);
+    }
+
+    .feature-card h3 {
+      color: var(--primary-color);
+      margin-bottom: 10px;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      color: var(--text-dark);
+    }
+
+    /* Media Queries for smaller screens */
+    @media (max-width: 768px) {
+      .navbar a {
+        display: block;
+        margin: 10px 0;
+      }
+
+      .container {
+        padding: 20px;
+        margin: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <a href="/authhome">HOME</a>
+    <a href="/studdetails">STUDENT DETAILS</a>
+    <a href="/roomall">ROOM ALLOTMENT</a>
+    <a href="/hostelcompview">HOSTEL COMPLAINT</a>
+    <a href="/messcompview">MESS COMPLAINT</a>
+    <a href="/authprofile">PROFILE</a>
+  </div>
+
+  <div class="container">
+    <h1>Authority Home Page</h1>
+    <p>Welcome to the Authority Dashboard. Below are the various features available to you:</p>
+
+    <h2>Features Overview:</h2>
+
+    <div class="features">
+      <!-- Student Details Card -->
+      <div class="feature-card">
+        <h3>Student Details</h3>
+        <p>Access and manage details of all students, including personal, hostel, and payment information. It's an essential tool for administrative functions.</p>
+      </div>
+
+      <!-- Room Allotment Card -->
+      <div class="feature-card">
+        <h3>Room Allotment</h3>
+        <p>Allot rooms to students based on availability and manage their accommodation preferences. Ensure smooth hostel management.</p>
+      </div>
+
+      <!-- Hostel Complaints Card -->
+      <div class="feature-card">
+        <h3>Hostel Complaints</h3>
+        <p>View and manage hostel-related complaints submitted by students. Take necessary actions and resolve issues to improve the student living experience.</p>
+      </div>
+
+      <!-- Mess Complaints Card -->
+      <div class="feature-card">
+        <h3>Mess Complaints</h3>
+        <p>View and manage mess-related complaints. Ensure smooth operations of the hostel mess services and address issues swiftly.</p>
+      </div>
+
+      <!-- Profile Card -->
+      <div class="feature-card">
+        <h3>Profile</h3>
+        <p>View and update your profile details, including personal and login information. Keep your records up to date for smooth management.</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

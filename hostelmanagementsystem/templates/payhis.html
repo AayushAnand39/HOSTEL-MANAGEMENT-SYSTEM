@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Payment History</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    :root {
+      --primary-color: #004d40;
+      --accent-color: #1de9b6;
+      --bg-light: #f1f8f9;
+      --text-dark: #333;
+      --white: #fff;
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      padding-bottom: 50px;
+    }
+
+    .navbar {
+      background-color: var(--primary-color);
+      padding: 18px 0;
+      text-align: center;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .navbar a {
+      color: var(--white);
+      text-decoration: none;
+      margin: 0 15px;
+      font-weight: 500;
+      font-size: 16px;
+      position: relative;
+      transition: color 0.3s;
+    }
+
+    .navbar a::after {
+      content: '';
+      display: block;
+      height: 2px;
+      background: var(--accent-color);
+      width: 0;
+      transition: width 0.3s;
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+    }
+
+    .navbar a:hover::after {
+      width: 100%;
+    }
+
+    .navbar a:hover {
+      color: var(--accent-color);
+    }
+
+    .container {
+      max-width: 1000px;
+      background-color: var(--white);
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      color: var(--primary-color);
+      text-align: center;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+
+    th, td {
+      padding: 12px 15px;
+      text-align: center;
+    }
+
+    th {
+      background-color: var(--primary-color);
+      color: var(--white);
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .message {
+      text-align: center;
+      font-weight: bold;
+      margin-top: 20px;
+    }
+
+    .error {
+      color: red;
+    }
+
+    @media (max-width: 768px) {
+      .navbar a {
+        display: block;
+        margin: 10px 0;
+      }
+
+      .container {
+        padding: 20px;
+        margin: 20px;
+      }
+
+      table, thead, tbody, th, td, tr {
+        display: block;
+      }
+
+      th {
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+      }
+
+      tr {
+        margin-bottom: 15px;
+      }
+
+      td {
+        border: none;
+        position: relative;
+        padding-left: 50%;
+        text-align: left;
+      }
+
+      td::before {
+        content: attr(data-label);
+        position: absolute;
+        left: 15px;
+        font-weight: bold;
+        color: #555;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <a href="/studhome">HOME</a>
+    <a href="/hostelreg">HOSTEL REGISTRATION AND FEE PAYMENT</a>
+    <a href="/payhis">PAYMENT HISTORY</a>
+    <a href="/hostelcomp">HOSTEL COMPLAINT</a>
+    <a href="/messcomp">MESS COMPLAINT</a>
+    <a href="/studprofile">PROFILE</a>
+  </div>
+
+  <div class="container">
+    <h2>Payment History</h2>
+
+    {% if error %}
+      <p class="message error">{{ error }}</p>
+    {% elif payments %}
+      <table>
+        <thead>
+          <tr>
+            <th>Student ID</th>
+            <th>Name</th>
+            <th>Bank Account No</th>
+            <th>Hostel Payment</th>
+            <th>Mess Payment</th>
+            <th>Fine</th>
+            <th>Refund</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in payments %}
+          <tr>
+            <td data-label="Student ID">{{ p.0 }}</td>
+            <td data-label="Name">{{ p.1 }}</td>
+            <td data-label="Bank Account No">{{ p.2 }}</td>
+            <td data-label="Hostel Payment">{{ p.3 }}</td>
+            <td data-label="Mess Payment">{{ p.4 }}</td>
+            <td data-label="Fine">{{ p.5 }}</td>
+            <td data-label="Refund">{{ p.6 }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p class="message">No payment records found.</p>
+    {% endif %}
+  </div>
+</body>
+</html>
