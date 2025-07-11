@@ -6,13 +6,13 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
-      --primary: #14532d;
-      --accent: #22c55e;
-      --light: #f0fdf4;
+      --primary: #004d40;
+      --accent: #1de9b6;
+      --light: #f1f8f9;
       --danger: #dc2626;
       --success: #16a34a;
       --white: #fff;
-      --shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     }
 
     * {
@@ -174,12 +174,12 @@
 </head>
 <body>
   <div class="navbar">
-    <a href="/authhome">HOME</a>
-    <a href="/studdetails">STUDENT DETAILS</a>
-    <a href="/roomall">ROOM ALLOTMENT</a>
-    <a href="/hostelcompview">HOSTEL COMPLAINT</a>
-    <a href="/messcompview">MESS COMPLAINT</a>
-    <a href="/authprofile">PROFILE</a>
+    <a href="{% url 'authhome' email=email %}">HOME</a>
+    <a href="{% url 'studdetails' email=email %}">STUDENT DETAILS</a>
+    <a href="{% url 'roomall' email=email %}">ROOM ALLOTMENT</a>
+    <a href="{% url 'hostelcompview' email=email %}">HOSTEL COMPLAINT</a>
+    <a href="{% url 'messcompview' email=email %}">MESS COMPLAINT</a>
+    <a href="{% url 'authprofile' email=email %}">PROFILE</a>
   </div>
 
   <h1>Pending Mess Complaints</h1>

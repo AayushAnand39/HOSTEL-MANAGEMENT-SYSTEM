@@ -115,12 +115,12 @@
 </head>
 <body>
   <div class="navbar">
-    <a href="/studhome">HOME</a>
-    <a href="/hostelreg">HOSTEL REGISTRATION AND FEE PAYMENT</a>
-    <a href="/payhis">PAYMENT HISTORY</a>
-    <a href="/hostelcomp">HOSTEL COMPLAINT</a>
-    <a href="/messcomp">MESS COMPLAINT</a>
-    <a href="/studprofile">PROFILE</a>
+    <a href="{% url 'studhome' id=id %}">HOME</a>
+    <a href="{% url 'hostelreg' id=id %}">HOSTEL REGISTRATION AND FEE PAYMENT</a>
+    <a href="{% url 'payhis' id=id %}">PAYMENT HISTORY</a>
+    <a href="{% url 'hostel_comp' id=id %}">HOSTEL COMPLAINT</a>
+    <a href="{% url 'mess_comp' id=id %}">MESS COMPLAINT</a>
+    <a href="{% url 'studprofile' id=id %}">PROFILE</a>
   </div>
 
   <div class="container">

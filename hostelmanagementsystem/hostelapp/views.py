@@ -39,25 +39,40 @@ def authlogin(request):
         # Query the database only on email and password.
         with connection.cursor() as cursor:
             cursor.execute("""
-                SELECT id, name, email FROM hostelapp_authorities 
+                SELECT * FROM hostelapp_authorities 
                 WHERE email = %s AND password = %s
             """, [email, password])
             user = cursor.fetchone()
 
         if user:
             # Use the retrieved id from the database record.
-            auth_id = user[0]
-            print("Login successful, auth id:", auth_id)
-            request.session['auth_id'] = auth_id  # Setting session variable
-            return render(request, "authhome.html", {"authid": auth_id, "email": email})
+            # auth_id = user[0]
+            with connection.cursor() as cursor:
+                cursor.execute("""
+                    UPDATE hostelapp_authorities
+                    SET isLoggedIn = 'YES'
+                    WHERE email = %s
+                """,[email])
+            print("Login successful, email:", email)
+            # request.session['auth_id'] = auth_id  # Setting session variable
+            return redirect(authhome, email=email)
         else:
             print("Invalid login details")
             return render(request, "authlogin.html", {"error": "Invalid login credentials"})
     else:
         return render(request, "authlogin.html")
 
-def authhome(request):
-    return render(request,"authhome.html")
+def authhome(request, email):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT * FROM hostelapp_authorities
+            WHERE email = %s    
+        """,[email])
+        user = cursor.fetchone()
+    if user[7] == "YES":
+        return render(request,"authhome.html",{"email": email})
+    else :
+        return render(request, "authlogin.html", {"error": "Not Logged In"})
 
 def studreg(request):
     if request.method == "POST":
@@ -101,20 +116,43 @@ def studlogin(request):
             if user:
                 print("Login successful")
                 print("student id: " + student_id + " email: " + email)
-                request.session['student_id'] = student_id  # ✅ Store in session
-                return redirect('hostelreg')  # 🔁 redirect to hostelreg view
+                with connection.cursor() as cursor:
+                    cursor.execute("""
+                        UPDATE hostelapp_students
+                        SET isLoggedIn = 'YES'
+                        WHERE student_id = %s AND email = %s AND password = %s
+                    """,[student_id, email, password])
+                return redirect('studhome',id=student_id)  
                 # return authhome(request)
             else:
                 print("Some issues with details")
-                return render(request,"studlogin.html")
+                return render(request,"studlogin.html",{"error":"Invalid login credentials"})
     else:
-        return render(request,"studlogin.html")
+        return render(request,"studlogin.html",{"error":"Invalid login credentials"})
 
-def roomall(request):
-    return render(request,"roomall.html")
+def roomall(request, email):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT * FROM hostelapp_authorities
+            WHERE email = %s    
+        """,[email])
+        user = cursor.fetchone()
+    if user[7] == "YES":
+        return render(request,"roomall.html",{"email":email})
+    else :
+        return render(request, "authlogin.html", {"error": "Not Logged In"})
 
-def studhome(request):
-    return render(request,"studhome.html")
+def studhome(request,id):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT * FROM hostelapp_students
+            WHERE student_id = %s;
+        """,[id])
+        user = cursor.fetchone()
+    if (not user) or user[16] == "NO":
+        return render(request,"studlogin.html",{"error":"Invalid login credentials"})
+    else:
+        return render(request,"studhome.html",{"id":id})
 
 def get_hall_name(request):
     hallno = request.GET.get("hallno")
@@ -124,24 +162,35 @@ def get_hall_name(request):
     return JsonResponse({"hall_name": row[0] if row else None})
 
 
-def hostelreg(request):
-    student_id = request.session.get('student_id')
-    if not student_id:
-        return redirect("studlogin")
+def hostelreg(request, id):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT * FROM hostelapp_students
+            WHERE student_id = %s;
+        """,[id])
+        user = cursor.fetchone()
+    if (not user) or user[16] == "NO":
+        return render(request,"studlogin.html",{"error":"Invalid login credentials"})
 
     if request.method == "GET":
         with connection.cursor() as cursor:
             cursor.execute("""
-                SELECT student_name, year, email, phonenumber, room_no 
+                SELECT * 
                 FROM hostelapp_students 
                 WHERE student_id = %s
-            """, [student_id])
+            """, [id])
+            columns = [col[0] for col in cursor.description]
             row = cursor.fetchone()
         
         if row:
-            name, year, email, phonenumber, room_no = row
+            data = dict(zip(columns, row))
+            name = data['student_name']
+            year = data['year']
+            email = data['email']
+            phonenumber = data['phonenumber']
+            room_no = data['room_no']
             return render(request, "hostelreg.html", {
-                "student_id": student_id,
+                "student_id": id,
                 "name": name,
                 "year": year,
                 "email": email,
@@ -178,7 +227,7 @@ def hostelreg(request):
             """, [student_id, name, bankaccountno, seatrent, messfees])
 
         return render(request, "hostelreg.html", {
-            "student_id": student_id,
+            "student_id": id,
             "name": name,
             "year": year,
             "email": email,
@@ -187,23 +236,36 @@ def hostelreg(request):
             "success": "Payment details saved successfully."
         })
 
-def payhis(request):
-    student_id = request.session.get('student_id')  # assuming login stores student_id in session
-
-    if not student_id:
-        return render(request, "payhis.html", {"error": "User not logged in."})
+def payhis(request, id):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT * FROM hostelapp_students
+            WHERE student_id = %s;
+        """,[id])
+        user = cursor.fetchone()
+    if (not user) or user[16] == "NO":
+        return render(request,"studlogin.html",{"error":"Invalid login credentials"})
 
     with connection.cursor() as cursor:
         cursor.execute("""
             SELECT student_id, student_name, bank_account_no, hostelpayment, messpayment, fine, refund
             FROM hostelapp_studentpaymentdetails
             WHERE student_id = %s
-        """, [student_id])
+        """, [id])
         payment_data = cursor.fetchall()
 
-    return render(request, "payhis.html", {"payments": payment_data})
+    return render(request, "payhis.html", {"payments": payment_data, "id":id})
 
-def hostel_complaint(request):
+def hostel_complaint(request,id):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT * FROM hostelapp_students
+            WHERE student_id = %s;
+        """,[id])
+        user = cursor.fetchone()
+    if (not user) or user[16] == "NO":
+        return render(request,"studlogin.html",{"error":"Invalid login credentials"})
+    
     if request.method == 'POST':
         degree = request.POST.get('degree')
         gender = request.POST.get('gender')
@@ -215,8 +277,8 @@ def hostel_complaint(request):
             cursor.execute("""
                 SELECT student_id, hall_no, room_no
                 FROM hostelapp_students
-                WHERE degree = %s AND gender = %s AND year = %s
-            """, [degree, gender, year])
+                WHERE student_id = %s, degree = %s AND gender = %s AND year = %s
+            """, [id,degree, gender, year])
 
             student = cursor.fetchone()  # Get the first result if exists
             
@@ -235,15 +297,22 @@ def hostel_complaint(request):
                 # Step 4: If no student is found, return failure message
                 return HttpResponse("No student found matching the criteria.")
     
-    return render(request, 'hostelcomp.html')
+    return render(request, 'hostelcomp.html',{"id":id})
 
-def mess_complaint(request):
-    student_id = request.session.get('student_id')
+def mess_complaint(request,id):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT * FROM hostelapp_students
+            WHERE student_id = %s;
+        """,[id])
+        user = cursor.fetchone()
+    if (not user) or user[16] == "NO":
+        return render(request,"studlogin.html",{"error":"Invalid login credentials"})
     hall_no = None
 
-    if student_id:
+    if id:
         with connection.cursor() as cursor:
-            cursor.execute("SELECT hall_no FROM hostelapp_students WHERE student_id = %s", [student_id])
+            cursor.execute("SELECT hall_no FROM hostelapp_students WHERE student_id = %s", [id])
             row = cursor.fetchone()
             if row:
                 hall_no = row[0]
@@ -256,20 +325,24 @@ def mess_complaint(request):
             cursor.execute("""
                 INSERT INTO hostelapp_messcomplaints (student_id, complaint, hall_no, addressed)
                 VALUES (%s, %s, %s, %s)
-            """, [student_id, complaint, hall_no, addressed])
+            """, [id, complaint, hall_no, addressed])
 
-        return redirect('/messcomp')
+        return redirect('messcomp',id=id)
 
     return render(request, 'messcomp.html', {
-        'student_id': student_id,
+        'student_id': id,
         'hall_no': hall_no
     })
 
-def studprofile(request):
-    student_id = request.session.get('student_id')
-
-    if not student_id:
-        return redirect('/studlogin')
+def studprofile(request,id):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT * FROM hostelapp_students
+            WHERE student_id = %s;
+        """,[id])
+        user = cursor.fetchone()
+    if (not user) or user[16] == "NO":
+        return render(request,"studlogin.html",{"error":"Invalid login credentials"})
 
     context = {}
 
@@ -281,7 +354,7 @@ def studprofile(request):
                    phonenumber2, email, student_id
             FROM hostelapp_students
             WHERE student_id = %s
-        """, [student_id])
+        """, [id])
         student_data = cursor.fetchone()
 
         if student_data:
@@ -299,7 +372,7 @@ def studprofile(request):
                 'phonenumber1': student_data[10],
                 'phonenumber2': student_data[11],
                 'email': student_data[12],
-                'student_id': student_data[13],
+                'student_id': id,
             })
 
         # Fetch hostel complaints
@@ -307,7 +380,7 @@ def studprofile(request):
             SELECT complaint, hall_no, room_no, addressed
             FROM hostelapp_hostelcomplaints
             WHERE student_id = %s
-        """, [student_id])
+        """, [id])
         context['hostel_complaints'] = cursor.fetchall()
 
         # Fetch mess complaints
@@ -315,13 +388,21 @@ def studprofile(request):
             SELECT complaint, hall_no, addressed
             FROM hostelapp_messcomplaints
             WHERE student_id = %s
-        """, [student_id])
+        """, [id])
         context['mess_complaints'] = cursor.fetchall()
 
     return render(request, 'studprofile.html', context)
 
-def show_all_students(request):
+def show_all_students(request, email):
     # Get 'hall' from query params; default to 'all'
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT * FROM hostelapp_authorities
+            WHERE email = %s    
+        """,[email])
+        user = cursor.fetchone()
+    if (not user) or (user[7] == 'NO'):
+        return render(request,"authlogin.html",{"error":"User not found or not logged in"})
     hall = request.GET.get('hall', 'all')
 
     with connection.cursor() as cursor:
@@ -345,11 +426,21 @@ def show_all_students(request):
 
     return render(request, 'studdetails.html', {
         'students': student_list,
-        'hall': hall
+        'hall': hall,
+        'email' : email
     })
 
 
-def hall1_room_allotment(request):
+def hall1_room_allotment(request, email):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT * FROM hostelapp_authorities
+            WHERE email = %s    
+        """,[email])
+        user = cursor.fetchone()
+    if (not user) or (user[7] == 'NO'):
+        return render(request,"authlogin.html",{"error":"User not found or not logged in"})
+    
     hall_no = 1
 
     # 1️⃣ Fetch the hall name
@@ -418,15 +509,24 @@ def hall1_room_allotment(request):
                 )
 
         # Redirect back so that we re‑compute occupancy & members
-        return redirect('hall1')
+        return redirect('hall1',email=email)
 
     return render(request, 'hall1.html', {
         'hall_no':   hall_no,
         'hall_name': hall_name,
-        'rooms':     rooms
+        'rooms':     rooms,
+        'email' :    email
     })
 
-def hall2_room_allotment(request):
+def hall2_room_allotment(request, email):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT * FROM hostelapp_authorities
+            WHERE email = %s    
+        """,[email])
+        user = cursor.fetchone()
+    if (not user) or (user[7] == 'NO'):
+        return render(request,"authlogin.html",{"error":"User not found or not logged in"})
     hall_no = 2
 
     # 1️⃣ Fetch the hall name from HallDetails
@@ -494,15 +594,24 @@ def hall2_room_allotment(request):
                     f"Student {student_id} allotted to Room {room_no} in Hall {hall_no}."
                 )
 
-        return redirect('hall2')
+        return redirect('hall2',email=email)
 
     return render(request, 'hall2.html', {
         'hall_no':   hall_no,
         'hall_name': hall_name,
-        'rooms':     rooms
+        'rooms':     rooms,
+        'email' :    email
     })
  
-def hall3_room_allotment(request):
+def hall3_room_allotment(request, email):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT * FROM hostelapp_authorities
+            WHERE email = %s    
+        """,[email])
+        user = cursor.fetchone()
+    if (not user) or (user[7] == 'NO'):
+        return render(request,"authlogin.html",{"error":"User not found or not logged in"})
     hall_no = 3
 
     # 1️⃣ Get hall_name from HallDetails
@@ -568,15 +677,24 @@ def hall3_room_allotment(request):
                     f"Student {student_id} allotted to Room {room_no} in Hall {hall_no}."
                 )
 
-        return redirect('hall3')
+        return redirect('hall3',email=email)
 
     return render(request, 'hall3.html', {
         'hall_no':   hall_no,
         'hall_name': hall_name,
-        'rooms':     rooms
+        'rooms':     rooms,
+        'email' :    email
     })
  
-def hall4_room_allotment(request):
+def hall4_room_allotment(request, email):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT * FROM hostelapp_authorities
+            WHERE email = %s    
+        """,[email])
+        user = cursor.fetchone()
+    if (not user) or (user[7] == 'NO'):
+        return render(request,"authlogin.html",{"error":"User not found or not logged in"})
     hall_no = 4
 
     # 1️⃣ Fetch hall_name
@@ -642,15 +760,24 @@ def hall4_room_allotment(request):
                     f"Student {student_id} allotted to Room {room_no} in Hall {hall_no}."
                 )
 
-        return redirect('hall4')
+        return redirect('hall4',email=email)
 
     return render(request, 'hall4.html', {
         'hall_no':   hall_no,
         'hall_name': hall_name,
-        'rooms':     rooms
+        'rooms':     rooms,
+        'email' :    email
     })
  
-def hall5_room_allotment(request):
+def hall5_room_allotment(request, email):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT * FROM hostelapp_authorities
+            WHERE email = %s    
+        """,[email])
+        user = cursor.fetchone()
+    if (not user) or (user[7] == 'NO'):
+        return render(request,"authlogin.html",{"error":"User not found or not logged in"})
     hall_no = 5
 
     # 1️⃣ Fetch hall_name
@@ -716,15 +843,24 @@ def hall5_room_allotment(request):
                     f"Student {student_id} allotted to Room {room_no} in Hall {hall_no}."
                 )
 
-        return redirect('hall5')
+        return redirect('hall5',email=email)
 
     return render(request, 'hall5.html', {
         'hall_no':   hall_no,
         'hall_name': hall_name,
-        'rooms':     rooms
+        'rooms':     rooms,
+        'email' :    email
     })
  
-def hall6_room_allotment(request):
+def hall6_room_allotment(request, email):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT * FROM hostelapp_authorities
+            WHERE email = %s    
+        """,[email])
+        user = cursor.fetchone()
+    if (not user) or (user[7] == 'NO'):
+        return render(request,"authlogin.html",{"error":"User not found or not logged in"})
     hall_no = 6
 
     # 1️⃣ Fetch hall_name
@@ -790,15 +926,24 @@ def hall6_room_allotment(request):
                     f"Student {student_id} allotted to Room {room_no} in Hall {hall_no}."
                 )
 
-        return redirect('hall6')
+        return redirect('hall6',email=email)
 
     return render(request, 'hall6.html', {
         'hall_no':   hall_no,
         'hall_name': hall_name,
-        'rooms':     rooms
+        'rooms':     rooms,
+        'email' :    email
     })
 
-def hostel_comp_view(request):
+def hostel_comp_view(request, email):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT * FROM hostelapp_authorities
+            WHERE email = %s    
+        """,[email])
+        user = cursor.fetchone()
+    if (not user) or (user[7] == 'NO'):
+        return render(request,"authlogin.html",{"error":"User not found or not logged in"})
     # Handle “mark addressed” action
     if request.method == 'POST':
         comp_id = request.POST.get('comp_id')
@@ -810,7 +955,7 @@ def hostel_comp_view(request):
                 [comp_id]
             )
         messages.success(request, "Complaint marked as addressed.")
-        return redirect('hostelcompview')
+        return redirect('hostelcompview',email=email)
 
     # Fetch all un‑addressed complaints
     with connection.cursor() as cursor:
@@ -822,10 +967,19 @@ def hostel_comp_view(request):
         complaints = cursor.fetchall()  # [(id, student_id, complaint, hall_no, room_no), ...]
 
     return render(request, 'hostelcompview.html', {
-        'complaints': complaints
+        'complaints': complaints,
+        'email' : email
     })
 
-def mess_comp_view(request):
+def mess_comp_view(request, email):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT * FROM hostelapp_authorities
+            WHERE email = %s    
+        """,[email])
+        user = cursor.fetchone()
+    if (not user) or (user[7] == 'NO'):
+        return render(request,"authlogin.html",{"error":"User not found or not logged in"})
     # 1️⃣ Handle “mark addressed” POST
     if request.method == 'POST':
         comp_id = request.POST.get('comp_id')
@@ -837,7 +991,7 @@ def mess_comp_view(request):
                 [comp_id]
             )
         messages.success(request, "Mess complaint marked as addressed.")
-        return redirect('messcompview')
+        return redirect('messcompview',email=email)
 
     # 2️⃣ Fetch all un‑addressed mess complaints
     with connection.cursor() as cursor:
@@ -849,32 +1003,38 @@ def mess_comp_view(request):
         complaints = cursor.fetchall()  # [(id, student_id, complaint, hall_no), ...]
 
     return render(request, 'messcompview.html', {
-        'complaints': complaints
+        'complaints': complaints,
+        "email" : email
     })
 
-def auth_profile(request):
+def auth_profile(request, email):
     # Check if 'auth_id' exists in the session
-    auth_id = request.session.get('auth_id')
-    if not auth_id:
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT * FROM hostelapp_authorities
+            WHERE email = %s
+        """,[email])
+        user = cursor.fetchone()
+    if (not user) or user[7] == "NO":
         # If no valid session, redirect to login page
         return redirect('/authlogin')
 
     with connection.cursor() as cursor:
         cursor.execute("""
-            SELECT name, position, hallno, hallname, phonenumber, email
+            SELECT *
             FROM hostelapp_authorities
-            WHERE id = %s
-        """, [auth_id])
+            WHERE email = %s
+        """, [email])
         row = cursor.fetchone()
 
     if row:
         context = {
-            'name': row[0],
-            'position': row[1],
-            'hallno': row[2],
+            'name': row[4],
+            'position': row[6],
+            'hallno': row[0],
             'hallname': row[3],
-            'phonenumber': row[4],
-            'email': row[5]
+            'phonenumber': row[5],
+            'email': row[2]
         }
     else:
         # Handle case where the id does not match a record.
@@ -882,7 +1042,16 @@ def auth_profile(request):
 
     return render(request, "authprofile.html", context)
 
-def checkincheckout_view(request):
+def checkincheckout_view(request, email):
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT * FROM hostelapp_authorities
+            WHERE email = %s    
+        """,[email])
+        user = cursor.fetchone()
+    if (not user) or (user[7] == 'NO'):
+        return render(request,"authlogin.html",{"error":"User not found or not logged in"})
+    
     if request.method == 'POST':
         sid      = request.POST['student_id']
         name     = request.POST['name']
@@ -896,7 +1065,7 @@ def checkincheckout_view(request):
                 VALUES (%s, %s, %s, %s)
             """, [sid, name, check_in, check_out])
 
-        return redirect('checkincheckout')
+        return redirect('checkincheckout', email=email)
 
     # GET → fetch all existing entries
     with connection.cursor() as cursor:
@@ -910,7 +1079,7 @@ def checkincheckout_view(request):
       {'student_id': r[0], 'name': r[1], 'check_in': r[2], 'check_out': r[3]}
       for r in rows
     ]
-    return render(request, 'checkincheckout.html', {'entries': entries})
+    return render(request, 'checkincheckout.html', {'entries': entries, 'email' : email})
 
 
 @require_GET
@@ -929,14 +1098,24 @@ def get_student_name(request):
     return JsonResponse({'name': name})
 
 
-def auth_logout(request):
+def auth_logout(request, email):
     # clear all session data
-    request.session.flush()
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            UPDATE hostelapp_authorities
+            SET isLoggedIn = 'NO'
+            WHERE email = %s
+        """,[email])
     # optional: show a one‑time message
     messages.info(request, "You have been logged out.")
     return redirect('authlogin')
 
-def stud_logout(request):
+def stud_logout(request,id):
     # clear session completely
-    request.session.flush()
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            UPDATE hostelapp_students
+            SET isLoggedIn = 'NO'
+            WHERE student_id = %s
+        """,[id])
     return redirect('studlogin')

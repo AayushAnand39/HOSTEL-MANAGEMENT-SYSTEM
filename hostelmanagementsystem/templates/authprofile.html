@@ -6,11 +6,12 @@
   <title>Authority Profile</title>
   <style>
     :root {
-      --primary:  #14532d;
-      --accent:   #22c55e;
+      --primary: #004d40;
+      --accent:   #1de9b6;
       --danger:   #e74c3c;       /* for logout */
-      --light:    #f0fdf4;
-      --white:    #ffffff;
+      --light:    #f1f8f9;
+      --dark:     #333;
+      --white:    #fff;
       --shadow:   0 2px 10px rgba(0, 0, 0, 0.05);
     }
 
@@ -23,13 +24,13 @@
 
     body {
       background-color: var(--light);
-      color: #1e293b;
-      padding-bottom: 60px;
+      color: var(--dark);
+      padding-bottom: 50px;
     }
 
     .navbar {
       background-color: var(--primary);
-      padding: 20px 0;           /* slightly taller */
+      padding: 18px 0;           /* slightly taller */
       text-align: center;
       box-shadow: var(--shadow);
       position: sticky;
@@ -40,11 +41,11 @@
     .navbar a {
       color: var(--white);
       text-decoration: none;
-      margin: 0 18px;           /* more breathing room */
+      margin: 0 15px;           /* more breathing room */
       font-weight: 500;
-      font-size: 1.05rem;       /* a bit larger */
+      font-size: 16px;       /* a bit larger */
       position: relative;
-      transition: color 0.2s ease;
+      transition: color 0.3s;
     }
     .navbar a::after {
       content: "";
@@ -154,12 +155,12 @@
 </head>
 <body>
   <div class="navbar">
-    <a href="/authhome">HOME</a>
-    <a href="/studdetails">STUDENT DETAILS</a>
-    <a href="/roomall">ROOM ALLOTMENT</a>
-    <a href="/hostelcompview">HOSTEL COMPLAINT</a>
-    <a href="/messcompview">MESS COMPLAINT</a>
-    <a href="/authprofile">PROFILE</a>
+    <a href="{% url 'authhome' email=email %}">HOME</a>
+    <a href="{% url 'studdetails' email=email %}">STUDENT DETAILS</a>
+    <a href="{% url 'roomall' email=email %}">ROOM ALLOTMENT</a>
+    <a href="{% url 'hostelcompview' email=email %}">HOSTEL COMPLAINT</a>
+    <a href="{% url 'messcompview' email=email %}">MESS COMPLAINT</a>
+    <a href="{% url 'authprofile' email=email %}">PROFILE</a>
   </div>
 
   <div class="profile-container">
@@ -174,10 +175,10 @@
     </table>
 
     <div class="profile-actions">
-      <a href="{% url 'checkincheckout' %}" class="btn checkin">
+      <a href="{% url 'checkincheckout' email=email %}" class="btn checkin">
         Go to Check‑In/Out
       </a>
-      <a href="{% url 'auth_logout' %}" class="btn logout">
+      <a href="{% url 'auth_logout' email=email%}" class="btn logout">
         Logout
       </a>
     </div>

@@ -7,11 +7,12 @@
   <title>Check In / Check Out</title>
   <style>
     :root {
-      --primary:   #1d4630;
-      --accent:    #218838;
-      --light-bg:  #eef5f2;
-      --white:     #ffffff;
-      --shadow:    0 8px 16px rgba(0,0,0,0.1);
+      --primary:   #004d40;
+      --accent:    #1de9b6;
+      --light-bg:  #f1f8f9;
+      --white:     #fff;
+      --text-dark: #333;
+      --shadow:    0 8px 20px rgba(0,0,0,0.1);
       --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
 
@@ -23,26 +24,26 @@
 
     body {
       background-color: var(--light-bg);
-      color: #333;
-      padding-bottom: 60px;
+      color: var(--text-dark);
+      padding-bottom: 50px;
     }
 
     /* Navbar */
     .navbar {
       background-color: var(--primary);
-      padding: 20px 0;
+      padding: 18px 0;
       text-align: center;
-      position: sticky; top: 0; z-index: 100;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+      position: sticky; top: 0; z-index: 1000;
+      box-shadow: var(--shadow);
     }
     .navbar a {
       color: var(--white);
       text-decoration: none;
-      margin: 0 20px;
+      margin: 0 15px;
       font-weight: 500;
-      font-size: 1.1rem;
+      font-size: 16px;
       position: relative;
-      transition: color .2s ease;
+      transition: color 0.3s;
     }
     .navbar a::after {
       content: "";
@@ -171,19 +172,19 @@
 </head>
 <body>
   <div class="navbar">
-    <a href="/authhome">HOME</a>
-    <a href="/studdetails">STUDENT DETAILS</a>
-    <a href="/roomall">ROOM ALLOTMENT</a>
-    <a href="/hostelcompview">HOSTEL COMPLAINT</a>
-    <a href="/messcompview">MESS COMPLAINT</a>
-    <a href="/authprofile">PROFILE</a>
+    <a href="{% url 'authhome' email=email %}">HOME</a>
+    <a href="{% url 'studdetails' email=email %}">STUDENT DETAILS</a>
+    <a href="{% url 'roomall' email=email %}">ROOM ALLOTMENT</a>
+    <a href="{% url 'hostelcompview' email=email %}">HOSTEL COMPLAINT</a>
+    <a href="{% url 'messcompview' email=email %}">MESS COMPLAINT</a>
+    <a href="{% url 'authprofile' email=email %}">PROFILE</a>
   </div>
 
   <div class="content-card">
     <h1>Check In / Check Out</h1>
 
     <form method="post"
-          action="{% url 'checkincheckout' %}"
+          action="{% url 'checkincheckout' email=email %}"
           class="inline-form">
       {% csrf_token %}
       <div class="form-group">

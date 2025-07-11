@@ -166,26 +166,26 @@
 </head>
 <body>
   <div class="navbar">
-    <a href="/authhome">HOME</a>
-    <a href="/studdetails">STUDENT DETAILS</a>
-    <a href="/roomall">ROOM ALLOTMENT</a>
-    <a href="/hostelcompview">HOSTEL COMPLAINT</a>
-    <a href="/messcompview">MESS COMPLAINT</a>
-    <a href="/authprofile">PROFILE</a>
+    <a href="{% url 'authhome' email=email %}">HOME</a>
+    <a href="{% url 'studdetails' email=email %}">STUDENT DETAILS</a>
+    <a href="{% url 'roomall' email=email %}">ROOM ALLOTMENT</a>
+    <a href="{% url 'hostelcompview' email=email %}">HOSTEL COMPLAINT</a>
+    <a href="{% url 'messcompview' email=email %}">MESS COMPLAINT</a>
+    <a href="{% url 'authprofile' email=email %}">PROFILE</a>
   </div>
 
   <div class="container">
     <h1>Student Details</h1>
 
     <div class="button-container">
-      <form method="get" action="/studdetails"><button type="submit" name="hall" value="1">Hall 1</button></form>
-      <form method="get" action="/studdetails"><button type="submit" name="hall" value="2">Hall 2</button></form>
-      <form method="get" action="/studdetails"><button type="submit" name="hall" value="3">Hall 3</button></form>
-      <form method="get" action="/studdetails"><button type="submit" name="hall" value="4">Hall 4</button></form>
-      <form method="get" action="/studdetails"><button type="submit" name="hall" value="5">Hall 5</button></form>
-      <form method="get" action="/studdetails"><button type="submit" name="hall" value="6">Hall 6</button></form>
+      <form method="get" action="{% url 'studdetails' email=email %}"><button type="submit" name="hall" value="1">Hall 1</button></form>
+      <form method="get" action="{% url 'studdetails' email=email %}"><button type="submit" name="hall" value="2">Hall 2</button></form>
+      <form method="get" action="{% url 'studdetails' email=email %}"><button type="submit" name="hall" value="3">Hall 3</button></form>
+      <form method="get" action="{% url 'studdetails' email=email %}"><button type="submit" name="hall" value="4">Hall 4</button></form>
+      <form method="get" action="{% url 'studdetails' email=email %}"><button type="submit" name="hall" value="5">Hall 5</button></form>
+      <form method="get" action="{% url 'studdetails' email=email %}"><button type="submit" name="hall" value="6">Hall 6</button></form>
       <br><br>
-      <form method="get" action="/studdetails"><button type="submit" name="hall" value="all">Show All Students</button></form>
+      <form method="get" action="{% url 'studdetails' email=email %}"><button type="submit" name="hall" value="all">Show All Students</button></form>
     </div>
 
     <h2>

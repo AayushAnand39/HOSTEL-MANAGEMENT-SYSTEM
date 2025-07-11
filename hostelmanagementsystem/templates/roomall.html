@@ -126,23 +126,23 @@
 </head>
 <body>
   <div class="navbar">
-    <a href="/authhome">HOME</a>
-    <a href="/studdetails">STUDENT DETAILS</a>
-    <a href="/roomall">ROOM ALLOTMENT</a>
-    <a href="/hostelcompview">HOSTEL COMPLAINT</a>
-    <a href="/messcompview">MESS COMPLAINT</a>
-    <a href="/authprofile">PROFILE</a>
+    <a href="{% url 'authhome' email=email %}">HOME</a>
+    <a href="{% url 'studdetails' email=email %}">STUDENT DETAILS</a>
+    <a href="{% url 'roomall' email=email %}">ROOM ALLOTMENT</a>
+    <a href="{% url 'hostelcompview' email=email %}">HOSTEL COMPLAINT</a>
+    <a href="{% url 'messcompview' email=email %}">MESS COMPLAINT</a>
+    <a href="{% url 'authprofile' email=email %}">PROFILE</a>
   </div>
 
   <div class="container">
     <h2>Select the hall for which your room allocation needs to be done</h2>
     <div class="button-container">
-      <a href="/hall1"><button>Hall 1</button></a>
-      <a href="/hall2"><button>Hall 2</button></a>
-      <a href="/hall3"><button>Hall 3</button></a>
-      <a href="/hall4"><button>Hall 4</button></a>
-      <a href="/hall5"><button>Hall 5</button></a>
-      <a href="/hall6"><button>Hall 6</button></a>
+      <a href="{% url 'hall1' email=email %}"><button>Hall 1</button></a>
+      <a href="{% url 'hall2' email=email %}"><button>Hall 2</button></a>
+      <a href="{% url 'hall3' email=email %}"><button>Hall 3</button></a>
+      <a href="{% url 'hall4' email=email %}"><button>Hall 4</button></a>
+      <a href="{% url 'hall5' email=email %}"><button>Hall 5</button></a>
+      <a href="{% url 'hall6' email=email %}"><button>Hall 6</button></a>
     </div>
   </div>
 </body>
