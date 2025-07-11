@@ -128,7 +128,7 @@ def studlogin(request):
                 print("Some issues with details")
                 return render(request,"studlogin.html",{"error":"Invalid login credentials"})
     else:
-        return render(request,"studlogin.html",{"error":"Invalid login credentials"})
+        return render(request,"studlogin.html")
 
 def roomall(request, email):
     with connection.cursor() as cursor:
