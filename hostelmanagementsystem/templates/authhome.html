@@ -137,12 +137,12 @@
 </head>
 <body>
   <div class="navbar">
-    <a href="/authhome">HOME</a>
-    <a href="/studdetails">STUDENT DETAILS</a>
-    <a href="/roomall">ROOM ALLOTMENT</a>
-    <a href="/hostelcompview">HOSTEL COMPLAINT</a>
-    <a href="/messcompview">MESS COMPLAINT</a>
-    <a href="/authprofile">PROFILE</a>
+    <a href="{% url 'authhome' email=email %}">HOME</a>
+    <a href="{% url 'studdetails' email=email %}">STUDENT DETAILS</a>
+    <a href="{% url 'roomall' email=email %}">ROOM ALLOTMENT</a>
+    <a href="{% url 'hostelcompview' email=email %}">HOSTEL COMPLAINT</a>
+    <a href="{% url 'messcompview' email=email %}">MESS COMPLAINT</a>
+    <a href="{% url 'authprofile' email=email %}">PROFILE</a>
   </div>
 
   <div class="container">

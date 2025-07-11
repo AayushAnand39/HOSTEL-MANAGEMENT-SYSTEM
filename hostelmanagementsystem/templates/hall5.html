@@ -6,13 +6,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     :root {
-      --primary: #2c3e50;
-      --accent: #1abc9c;
-      --light: #ecf0f1;
-      --danger: #e74c3c;
-      --success: #2ecc71;
+      --primary-color: #004d40;
+      --accent-color: #1de9b6;
+      --bg-light: #f1f8f9;
+      --text-dark: #333;
       --white: #fff;
-      --shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      --shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     }
 
     * {
@@ -23,19 +22,19 @@
     }
 
     body {
-      background-color: var(--light);
-      color: #333;
-      padding-bottom: 60px;
+      background-color: var(--bg-light);
+      color: var(--text-dark);
+      padding-bottom: 50px;
     }
 
     .navbar {
-      background-color: var(--primary);
-      padding: 15px 0;
+      background-color: var(--primary-color);
+      padding: 18px 0;
       text-align: center;
+      box-shadow: var(--shadow);
       position: sticky;
       top: 0;
-      z-index: 10;
-      box-shadow: var(--shadow);
+      z-index: 1000;
     }
 
     .navbar a {
@@ -43,80 +42,82 @@
       text-decoration: none;
       margin: 0 15px;
       font-weight: 500;
-      transition: color 0.2s ease;
+      font-size: 16px;
       position: relative;
-    }
-
-    .navbar a:hover {
-      color: var(--accent);
+      transition: color 0.3s;
     }
 
     .navbar a::after {
       content: "";
+      display: block;
       height: 2px;
+      background: var(--accent-color);
       width: 0;
+      transition: width 0.3s;
       position: absolute;
-      bottom: -5px;
+      bottom: -4px;
       left: 0;
-      background-color: var(--accent);
-      transition: width 0.3s ease;
     }
 
     .navbar a:hover::after {
       width: 100%;
     }
 
+    .navbar a:hover {
+      color: var(--accent-color);
+    }
+
     h1 {
       text-align: center;
-      margin: 30px 0 20px;
-      font-size: 2rem;
-      color: var(--primary);
+      color: var(--primary-color);
+      margin: 40px 0 20px;
+      font-size: 2.5em;
     }
 
     .messages {
-      max-width: 900px;
+      max-width: 800px;
       margin: 0 auto 20px;
+      padding: 0;
       list-style: none;
-      padding: 0 20px;
     }
 
     .messages li {
-      padding: 12px 16px;
-      border-radius: 5px;
+      padding: 10px 15px;
+      border-radius: 6px;
       margin-bottom: 10px;
-      font-weight: 500;
     }
 
     .messages .success {
-      background-color: #d4edda;
-      color: var(--success);
+      background-color: #e0f2f1;
+      color: #00796b;
     }
 
     .messages .error {
-      background-color: #f8d7da;
-      color: var(--danger);
+      background-color: #ffebee;
+      color: #c62828;
     }
 
     table {
       width: 90%;
       margin: 0 auto;
       border-collapse: collapse;
-      background: var(--white);
+      background-color: var(--white);
+      box-shadow: var(--shadow);
       border-radius: 8px;
       overflow: hidden;
-      box-shadow: var(--shadow);
-      min-width: 720px;
+      min-width: 700px;
     }
 
     th, td {
-      padding: 14px;
+      padding: 15px;
       text-align: center;
       border: 1px solid #ddd;
     }
 
     th {
-      background-color: var(--primary);
+      background-color: var(--primary-color);
       color: var(--white);
+      font-weight: 600;
     }
 
     tr:nth-child(even) td {
@@ -125,8 +126,8 @@
 
     form.inline {
       display: flex;
-      justify-content: center;
       align-items: center;
+      justify-content: center;
       gap: 10px;
     }
 
@@ -134,33 +135,75 @@
       padding: 6px 10px;
       border: 1px solid #ccc;
       border-radius: 4px;
-      min-width: 120px;
     }
 
     form.inline button {
-      background-color: var(--primary);
+      background-color: var(--primary-color);
       color: var(--white);
-      padding: 7px 12px;
       border: none;
-      border-radius: 4px;
+      padding: 8px 12px;
+      border-radius: 6px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      transition: background-color 0.3s;
     }
 
     form.inline button:hover {
-      background-color: var(--accent);
+      background-color: var(--accent-color);
     }
 
+    .container {
+      max-width: 800px;
+      background-color: var(--white);
+      margin: 40px auto;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    h2 {
+      color: var(--primary-color);
+      font-size: 2em;
+      margin-bottom: 30px;
+    }
+
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .button-container a {
+      text-decoration: none;
+    }
+
+    .button-container button {
+      background-color: var(--primary-color);
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      color: var(--white);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .button-container button:hover {
+      background-color: var(--accent-color);
+    }
+
+
     @media (max-width: 768px) {
-      table {
-        font-size: 14px;
-        min-width: unset;
-        width: 100%;
+      h1 {
+        font-size: 2em;
+        margin: 20px 0;
       }
 
-      .navbar a {
-        display: block;
-        margin: 10px 0;
+      table {
+        width: 100%;
+        font-size: 14px;
+        overflow-x: auto;
       }
 
       form.inline {
@@ -168,25 +211,33 @@
         gap: 6px;
       }
 
-      form.inline input[type="text"] {
-        width: 100%;
-      }
-
-      h1 {
-        font-size: 1.6rem;
-        margin: 25px 10px;
+      .navbar a {
+        display: block;
+        margin: 10px 0;
       }
     }
   </style>
 </head>
 <body>
   <div class="navbar">
-    <a href="/authhome">HOME</a>
-    <a href="/studdetails">STUDENT DETAILS</a>
-    <a href="/roomall">ROOM ALLOTMENT</a>
-    <a href="/hostelcompview">HOSTEL COMPLAINT</a>
-    <a href="/messcompview">MESS COMPLAINT</a>
-    <a href="/authprofile">PROFILE</a>
+    <a href="{% url 'authhome' email=email %}">HOME</a>
+    <a href="{% url 'studdetails' email=email %}">STUDENT DETAILS</a>
+    <a href="{% url 'roomall' email=email %}">ROOM ALLOTMENT</a>
+    <a href="{% url 'hostelcompview' email=email %}">HOSTEL COMPLAINT</a>
+    <a href="{% url 'messcompview' email=email %}">MESS COMPLAINT</a>
+    <a href="{% url 'authprofile' email=email %}">PROFILE</a>
+  </div>
+
+  <div class="container">
+    <h2>Select the hall for which your room allocation needs to be done</h2>
+    <div class="button-container">
+      <a href="{% url 'hall1' email=email %}"><button>Hall 1</button></a>
+      <a href="{% url 'hall2' email=email %}"><button>Hall 2</button></a>
+      <a href="{% url 'hall3' email=email %}"><button>Hall 3</button></a>
+      <a href="{% url 'hall4' email=email %}"><button>Hall 4</button></a>
+      <a href="{% url 'hall5' email=email %}"><button>Hall 5</button></a>
+      <a href="{% url 'hall6' email=email %}"><button>Hall 6</button></a>
+    </div>
   </div>
 
   <h1>Hall {{ hall_no }} ({{ hall_name }}) – Room Allotment</h1>
