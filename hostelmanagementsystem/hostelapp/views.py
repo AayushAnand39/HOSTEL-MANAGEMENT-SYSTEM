@@ -277,7 +277,7 @@ def hostel_complaint(request,id):
             cursor.execute("""
                 SELECT student_id, hall_no, room_no
                 FROM hostelapp_students
-                WHERE student_id = %s, degree = %s AND gender = %s AND year = %s
+                WHERE student_id = %s AND degree = %s AND gender = %s AND year = %s
             """, [id,degree, gender, year])
 
             student = cursor.fetchone()  # Get the first result if exists
@@ -327,7 +327,7 @@ def mess_complaint(request,id):
                 VALUES (%s, %s, %s, %s)
             """, [id, complaint, hall_no, addressed])
 
-        return redirect('messcomp',id=id)
+        return redirect('mess_comp',id=id)
 
     return render(request, 'messcomp.html', {
         'student_id': id,

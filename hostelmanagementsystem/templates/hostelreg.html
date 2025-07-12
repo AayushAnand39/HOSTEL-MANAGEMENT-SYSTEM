@@ -170,7 +170,7 @@
       <p class="message error">{{ error }}</p>
     {% endif %}
 
-    <form action="/hostelreg" method="post">
+    <form action="{% url 'hostelreg' student_id %}" method="post">
       {% csrf_token %}
       <p>Name: <input type="text" name="name" value="{{ name }}" readonly></p>
       <p>Room No: <input type="text" name="room_no" value="{{ room_no }}" readonly></p>
