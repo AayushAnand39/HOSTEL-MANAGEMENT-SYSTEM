@@ -5,7 +5,7 @@ from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_GET
 from django.contrib import messages
 
-# Create your views here.
+# Renders the index page
 def index(request):
     return render(request,"index.html")
 
@@ -128,7 +128,7 @@ def studlogin(request):
                 print("Some issues with details")
                 return render(request,"studlogin.html",{"error":"Invalid login credentials"})
     else:
-        return render(request,"studlogin.html",{"error":"Invalid login credentials"})
+        return render(request,"studlogin.html")
 
 def roomall(request, email):
     with connection.cursor() as cursor:
