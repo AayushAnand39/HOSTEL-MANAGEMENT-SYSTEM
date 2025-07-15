@@ -11,7 +11,7 @@
 | Field        | Type          | Null | Key | Default | Description                     |
 |--------------|---------------|------|-----|---------|---------------------------------|
 | `hallno`     | `varchar(3)`  | YES  |     | `NULL`  | Hall number of the authority    |
-| `password`   | `varchar(100)`| YES  |     | `NULL`  | Password (hashed)               |
+| `password`   | `varchar(100)`| YES  |     | `NULL`  | Password               |
 | `email`      | `varchar(100)`| NO   |     | `NULL`  | Email ID (used as unique login)|
 | `hallname`   | `varchar(100)`| YES  |     | `NULL`  | Full name of the hall           |
 | `name`       | `varchar(100)`| YES  |     | `NULL`  | Full name of the authority      |
@@ -90,7 +90,7 @@
 | `phonenumber1`   | `varchar(11)`  | YES  |     | NULL    |                  | Alternate phone number 1                        |
 | `phonenumber2`   | `varchar(11)`  | YES  |     | NULL    |                  | Alternate phone number 2                        |
 | `email`          | `varchar(100)` | YES  |     | NULL    |                  | Email address                                   |
-| `password`       | `varchar(100)` | YES  |     | NULL    |                  | Password (should be securely hashed)           |
+| `password`       | `varchar(100)` | YES  |     | NULL    |                  | Password          |
 | `room_no`        | `int`          | YES  |     | NULL    |                  | Allotted room number                            |
 | `gender`         | `varchar(6)`   | YES  |     | NULL    |                  | Gender (e.g., Male, Female, Other)             |
 | `isLoggedIn`     | `varchar(3)`   | NO   |     | NO      |                  | Login status (`YES` or `NO`)                   |
