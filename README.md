@@ -11,7 +11,7 @@
 |--------------|---------------|------|-----|---------|---------------------------------|
 | `hallno`     | `varchar(3)`  | YES  |     | `NULL`  | Hall number of the authority    |
 | `password`   | `varchar(100)`| YES  |     | `NULL`  | Password               |
-| `email`      | `varchar(100)`| NO   |     | `NULL`  | Email ID (used as unique login)|
+| `email`      | `varchar(100)`| NO   | PRI | `NULL`  | Email ID (used as unique login)|
 | `hallname`   | `varchar(100)`| YES  |     | `NULL`  | Full name of the hall           |
 | `name`       | `varchar(100)`| YES  |     | `NULL`  | Full name of the authority      |
 | `phonenumber`| `varchar(11)` | YES  |     | `NULL`  | Contact number                  |
